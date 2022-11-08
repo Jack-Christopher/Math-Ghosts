@@ -77,7 +77,7 @@ public class OperationController : MonoBehaviour
             }
         }
 
-        operationContent.text = operation;
+        operationContent.text = operation + "= ?";
         Debug.Log("Operation Generated: " + operation);
 
         // set Result
