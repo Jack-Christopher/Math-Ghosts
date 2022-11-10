@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class OperationController : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class OperationController : MonoBehaviour
     public GameObject ghostPrefab;
 
     public static int score = 0;
+    public static int remainingGhosts = 11;
 
 
     public bool IsCorrectAnswer() 
@@ -32,39 +34,48 @@ public class OperationController : MonoBehaviour
         List<int> operands = new List<int>();
         List<string> operators = new List<string>();
 
-        if (difficulty == OperationDifficulty.Easy)
+        // change the dificulty of the operation based on the remaining ghosts
+        // if (difficulty == OperationDifficulty.Easy)
+        if (remainingGhosts > 5)
         {
             operands.Add(Random.Range(1, 10));
             operands.Add(Random.Range(1, 10));
             
             operators.Add(" + ");
+            Debug.Log("Difficulty is Easy");
         }
-        else if (difficulty == OperationDifficulty.Medium)
+        // else if (difficulty == OperationDifficulty.Medium)
+        else if (remainingGhosts > 3)
         {
-            operands.Add(Random.Range(10, 20));
-            operands.Add(Random.Range(1, 10));
-
-            operators.Add(Random.Range(0, 2) == 0 ? " + " : " - ");
-        }
-        else if (difficulty == OperationDifficulty.Hard)
-        {
-            operands.Add(Random.Range(10, 20));
-            operands.Add(Random.Range(1, 10));
+            operands.Add(Random.Range(2, 10));
             operands.Add(Random.Range(2, 5));
 
+            operators.Add(Random.Range(0, 2) == 0 ? " * " : " - ");
+            Debug.Log("Difficulty is Medium");
+        }
+        // else if (difficulty == OperationDifficulty.Hard)
+        else if (remainingGhosts > 1)
+        {
+            operands.Add(Random.Range(2, 5));
+            operands.Add(Random.Range(1, 10));
+            operands.Add(Random.Range(1, 10));
+            
             operators.Add(" * ");
             operators.Add(Random.Range(0, 2) == 0 ? " + " : " - ");
+            Debug.Log("Difficulty is Hard");
         }
-        else if (difficulty == OperationDifficulty.Impossible)
+        // else if (difficulty == OperationDifficulty.Impossible)
+        else if (remainingGhosts > 0)
         {
             operands.Add(Random.Range(1, 10));
             operands.Add(Random.Range(1, 10));
             operands.Add(Random.Range(1, 10));
             operands.Add(Random.Range(1, 10));
             
-            operators.Add(Random.Range(0, 2) == 0 ? " * " : " / ");
+            operators.Add(Random.Range(0, 2) == 0 ? " * " : " * ");
+            operators.Add(Random.Range(0, 2) == 0 ? " + " : " + ");
             operators.Add(Random.Range(0, 2) == 0 ? " + " : " - ");
-            operators.Add(Random.Range(0, 2) == 0 ? " + " : " - ");
+            Debug.Log("Difficulty is Impossible");
         }
 
         string operation = "";
@@ -122,10 +133,12 @@ public class OperationController : MonoBehaviour
 
     void GenerateGhosts()
     {
+        remainingGhosts--;
+        Debug.Log("N° of ghosts: " + remainingGhosts);
         ghosts = new List<GameObject>();
         // Debug.Log("Generating ghosts");
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < remainingGhosts; i++)
         {
             int x = Random.Range(-40, 40);
             int z = Random.Range(-40, 40);
@@ -146,14 +159,14 @@ public class OperationController : MonoBehaviour
 
             // Debug.Log("'" + obj.name + "' created at " + obj.transform.position);
             ghosts.Add(obj);
+        }
 
-            // iterate over ghosts
-            // foreach (GameObject ghost in ghosts)
-            // {
-            //     ghost.GetComponent<GhostController>().enumerator = ghosts.GetEnumerator();
-            // }
-            // Destroy(obj, 10);
-        }        
+        // if no remaining ghosts, load menu scene
+        if (remainingGhosts == 0)
+        {
+            Debug.Log("No more ghosts");
+            SceneManager.LoadScene("Menu");
+        }
     }
 
     public void Restart()
@@ -173,8 +186,6 @@ public class OperationController : MonoBehaviour
 
     void Update()
     {
-        // random numbers
-        // GenerateOperation();
-        Debug.Log("score: " + score);
+        // Debug.Log("score: " + score);
     }
 }
