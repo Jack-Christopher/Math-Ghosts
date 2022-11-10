@@ -102,14 +102,18 @@ public class WeaponController : MonoBehaviour
         );
         foreach (RaycastHit hit in hits)
         {
+            if (hit.collider.gameObject == owner)
+            {
+                Debug.Log("Don't try suicide");
+                Invoke("ReloadScene", 2f);
+            }
+
             if (hit.collider.gameObject != owner && hit.collider.gameObject.name != "Dashboard")
             {
                 string hitName = hit.collider.gameObject.name;
-
                 // if it's a ghost
                 if (hitName.All(char.IsDigit))
                 {
-                    // hit.collider.gameObject.GetComponent<GhostController>().shout();
                     audioSource.PlayOneShot(ghost);
                     Debug.Log("Ghost: " + hitName);
                     // Destroy(hit.collider.gameObject, 0.5f);
