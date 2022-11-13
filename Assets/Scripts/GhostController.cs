@@ -12,6 +12,7 @@ public class GhostController : MonoBehaviour
     // public IEnumerator<GameObject> enumerator;
     public int correctAnswer;
     public Func<bool> IsCorrect;
+    public bool IsCorrectAnswer;
 
     public void CheckAnswer()
     {
@@ -50,12 +51,12 @@ public class GhostController : MonoBehaviour
         // move towards player
         Vector3 direction = player.transform.position - transform.position;
         Vector3 velocity = direction * 5f;
-        // velocity.y = 0f;
+
         velocity.Normalize();
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), 0.1f);
 
-        ghost.Move(velocity * Time.deltaTime); 
+        ghost.Move(velocity * Time.deltaTime *(IsCorrectAnswer ? 2 : 1));
 
         // keep y in 3
         transform.position = new Vector3(transform.position.x, 3, transform.position.z);
@@ -71,8 +72,8 @@ public class GhostController : MonoBehaviour
         return resultContent.text;
     }
 
-    public void shout()
+    public void SetIsCorrect(bool isCorrect)
     {
-
+        IsCorrectAnswer = isCorrect;
     }
 }

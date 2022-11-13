@@ -146,12 +146,17 @@ public class OperationController : MonoBehaviour
             obj.transform.position = new Vector3(x, 0, z);
             obj.transform.localScale = new Vector3(3, 3, 3);
             // obj.name = i.ToString();
-            if (i == 0) {   obj.GetComponent<GhostController>().SetText(Result.ToString());    }
+            if (i == 0) 
+            {   
+                obj.GetComponent<GhostController>().SetText(Result.ToString());
+                obj.GetComponent<GhostController>().SetIsCorrect(true);
+            }
             else 
             {  
                 int otherResult = Result + Random.Range(-15, 15);
                 if (otherResult == Result) { otherResult += 1; }
                 obj.GetComponent<GhostController>().SetText( otherResult.ToString() );
+                obj.GetComponent<GhostController>().SetIsCorrect(false);
             }
             obj.name = obj.GetComponent<GhostController>().GetText();
             obj.GetComponent<GhostController>().IsCorrect = IsCorrectAnswer;
