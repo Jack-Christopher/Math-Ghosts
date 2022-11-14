@@ -14,7 +14,7 @@ public class GhostController : MonoBehaviour
     public Func<bool> IsCorrect;
     public bool IsCorrectAnswer;
 
-    public void CheckAnswer()
+    public bool CheckAnswer()
     {
         int result = int.Parse(resultContent.text);
         if (result == correctAnswer)
@@ -22,10 +22,12 @@ public class GhostController : MonoBehaviour
             IsCorrect();
             Debug.Log("CA: Correct");
             // Destroy(gameObject);
+            return true;
         }
         else
         {
             Debug.Log("CA: Incorrect");
+            return false;
         }        
     }
 

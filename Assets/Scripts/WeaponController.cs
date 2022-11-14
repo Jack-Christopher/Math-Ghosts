@@ -34,7 +34,10 @@ public class WeaponController : MonoBehaviour
     public AudioClip shoot;
     public AudioClip ghost;
 
-    public GameObject owner { get; set; }
+    // public GameObject owner { get; set; }
+    public GameObject owner;
+    public GameObject CorrectPanel;
+    public GameObject WrongPanel;
 
     private void Awake()
     {
@@ -117,7 +120,19 @@ public class WeaponController : MonoBehaviour
                     audioSource.PlayOneShot(ghost);
                     Debug.Log("Ghost: " + hitName);
                     // Destroy(hit.collider.gameObject, 0.5f);
-                    hit.collider.gameObject.GetComponent<GhostController>().CheckAnswer();
+                    bool IsCorrectAnswer = hit.collider.gameObject.GetComponent<GhostController>().CheckAnswer();
+                    
+                    if (IsCorrectAnswer)
+                    {
+                        // active correct panel
+                        CorrectPanel.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        WrongPanel.gameObject.SetActive(true);
+                    }
+                    
+                    // 
                     // delay of 2 seconds
                     Invoke("ReloadScene", 2f);
                 }
